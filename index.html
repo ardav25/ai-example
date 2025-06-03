@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Townhall: AI dan Munculnya Kelas Rebahan</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0a0a;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated Background */
+        .matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #000428, #004e92, #009ffd, #00d2ff);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            z-index: -2;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Particle System */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            animation: particleFloat 8s linear infinite;
+        }
+
+        @keyframes particleFloat {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Neural Network Animation */
+        .neural-network {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .neural-node {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: #00ffff;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #00ffff;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .neural-connection {
+            position: absolute;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #00ffff, transparent);
+            animation: dataFlow 3s linear infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.5); opacity: 1; }
+        }
+
+        @keyframes dataFlow {
+            0% { opacity: 0; transform: scaleX(0); }
+            50% { opacity: 1; transform: scaleX(1); }
+            100% { opacity: 0; transform: scaleX(0); }
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Spectacular Header */
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 60px 30px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 30px;
+            box-shadow: 
+                0 30px 60px rgba(0, 255, 255, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(0, 255, 255, 0.3);
+            animation: headerGlow 3s ease-in-out infinite alternate;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(transparent, rgba(0, 255, 255, 0.1), transparent);
+            animation: rotate 10s linear infinite;
+        }
+
+        @keyframes headerGlow {
+            0% { box-shadow: 0 30px 60px rgba(0, 255, 255, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1); }
+            100% { box-shadow: 0 40px 80px rgba(0, 255, 255, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2); }
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .logo {
+            font-size: 80px;
+            margin-bottom: 30px;
+            animation: logoFloat 4s ease-in-out infinite;
+            filter: drop-shadow(0 0 20px rgba(0, 255, 255, 0.8));
+            position: relative;
+            z-index: 2;
+        }
+
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg) scale(1); }
+            25% { transform: translateY(-10px) rotate(5deg) scale(1.1); }
+            50% { transform: translateY(-5px) rotate(0deg) scale(1.05); }
+            75% { transform: translateY(-15px) rotate(-5deg) scale(1.1); }
+        }
+
+        h1 {
+            font-size: 3rem;
+            color: #ffffff;
+            margin-bottom: 15px;
+            background: linear-gradient(45deg, #00ffff, #ff00ff, #ffff00, #00ffff);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: textGlow 3s ease-in-out infinite;
+            position: relative;
+            z-index: 2;
+        }
+
+        @keyframes textGlow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .subtitle {
+            font-size: 1.4rem;
+            color: #b0b0b0;
+            font-weight: 300;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 2;
+            animation: slideInFromBottom 1s ease-out 0.5s both;
+        }
+
+        @keyframes slideInFromBottom {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .theme-highlight {
+            background: linear-gradient(135deg, #ff006e, #8338ec, #3a86ff);
+            color: white;
+            padding: 20px 40px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.3rem;
+            display: inline-block;
+            margin-top: 20px;
+            box-shadow: 
+                0 20px 40px rgba(255, 0, 110, 0.4),
+                0 0 30px rgba(131, 56, 236, 0.3);
+            animation: themeGlow 2s ease-in-out infinite alternate;
+            position: relative;
+            z-index: 2;
+            overflow: hidden;
+        }
+
+        .theme-highlight::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes themeGlow {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.05); }
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        /* Futuristic Cards */
+        .details-card, .agenda-section, .cta-section {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 25px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 
+                0 25px 50px rgba(0, 255, 255, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            animation: cardFloat 6s ease-in-out infinite;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .details-card::before, .agenda-section::before, .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #00ffff, transparent);
+            animation: scanLine 4s infinite;
+        }
+
+        @keyframes cardFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes scanLine {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: rgba(0, 255, 255, 0.1);
+            border-radius: 20px;
+            transition: all 0.5s ease;
+            border-left: 4px solid #00ffff;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .detail-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(0, 255, 255, 0.2), rgba(255, 0, 255, 0.2));
+            transition: width 0.5s ease;
+        }
+
+        .detail-item:hover {
+            transform: translateX(15px) scale(1.02);
+            box-shadow: 
+                0 20px 40px rgba(0, 255, 255, 0.3),
+                0 0 30px rgba(0, 255, 255, 0.2);
+            border-left-color: #ff00ff;
+        }
+
+        .detail-item:hover::before {
+            width: 100%;
+        }
+
+        .detail-icon {
+            font-size: 30px;
+            margin-right: 20px;
+            width: 50px;
+            text-align: center;
+            animation: iconSpin 3s ease-in-out infinite;
+            position: relative;
+            z-index: 2;
+        }
+
+        @keyframes iconSpin {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            25% { transform: rotate(5deg) scale(1.1); }
+            50% { transform: rotate(0deg) scale(1); }
+            75% { transform: rotate(-5deg) scale(1.1); }
+        }
+
+        .detail-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .detail-content h3 {
+            color: #ffffff;
+            margin-bottom: 8px;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .detail-content p {
+            color: #b0b0b0;
+            font-size: 1rem;
+        }
+
+        /* Agenda with Timeline Effect */
+        .agenda-section h2 {
+            color: #ffffff;
+            margin-bottom: 35px;
+            font-size: 2.2rem;
+            text-align: center;
+            background: linear-gradient(45deg, #00ffff, #ff00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .agenda-item {
+            background: linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(255, 0, 255, 0.1));
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 5px solid #00ffff;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .agenda-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(0, 255, 255, 0.2), rgba(255, 0, 255, 0.2));
+            transition: width 0.6s ease;
+        }
+
+        .agenda-item:hover {
+            transform: scale(1.03) translateX(10px);
+            box-shadow: 
+                0 25px 50px rgba(0, 255, 255, 0.3),
+                0 0 40px rgba(255, 0, 255, 0.2);
+            border-left-color: #ff00ff;
+        }
+
+        .agenda-item:hover::before {
+            width: 100%;
+        }
+
+        .agenda-time {
+            font-weight: 700;
+            color: #00ffff;
+            font-size: 1.3rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .agenda-title {
+            color: #ffffff;
+            font-weight: 600;
+            margin: 10px 0;
+            font-size: 1.1rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .agenda-desc {
+            color: #b0b0b0;
+            font-size: 1rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Spectacular CTA */
+        .cta-section {
+            text-align: center;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .cta-section h2 {
+            color: #ffffff;
+            margin-bottom: 25px;
+            font-size: 2.5rem;
+            background: linear-gradient(45deg, #ff006e, #8338ec, #3a86ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: textPulse 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes textPulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.05); }
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, #ff006e, #8338ec, #3a86ff);
+            color: white;
+            padding: 20px 50px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+            display: inline-block;
+            margin: 15px;
+            box-shadow: 
+                0 20px 40px rgba(255, 0, 110, 0.4),
+                0 0 30px rgba(131, 56, 236, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transition: all 0.6s ease;
+            transform: translate(-50%, -50%);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 
+                0 30px 60px rgba(255, 0, 110, 0.6),
+                0 0 50px rgba(131, 56, 236, 0.5);
+        }
+
+        .cta-button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .fun-fact {
+            background: linear-gradient(135deg, rgba(254, 202, 87, 0.2), rgba(255, 159, 243, 0.2));
+            color: #ffffff;
+            padding: 30px;
+            border-radius: 20px;
+            margin: 30px 0;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.1rem;
+            box-shadow: 0 20px 40px rgba(254, 202, 87, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: factGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes factGlow {
+            0% { box-shadow: 0 20px 40px rgba(254, 202, 87, 0.3); }
+            100% { box-shadow: 0 25px 50px rgba(254, 202, 87, 0.5); }
+        }
+
+        /* Typing Effect */
+        .typing-text {
+            overflow: hidden;
+            border-right: 3px solid #00ffff;
+            white-space: nowrap;
+            animation: typing 4s steps(40, end), blink-caret 0.75s step-end infinite;
+        }
+
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
+            50% { border-color: #00ffff; }
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .logo {
+                font-size: 60px;
+            }
+            
+            .header, .details-card, .agenda-section, .cta-section {
+                padding: 25px;
+            }
+            
+            .detail-item {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .detail-icon {
+                margin-bottom: 15px;
+                margin-right: 0;
+            }
+            
+            .cta-button {
+                display: block;
+                margin: 10px auto;
+                width: 80%;
+            }
+        }
+
+        /* AI Loading Animation */
+        .ai-loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            animation: fadeOut 3s ease-in-out 2s forwards;
+        }
+
+        .ai-text {
+            font-size: 3rem;
+            color: #00ffff;
+            font-weight: bold;
+            animation: aiPulse 1s ease-in-out infinite;
+        }
+
+        @keyframes aiPulse {
+            0%, 100% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.2); opacity: 1; }
+        }
+
+        @keyframes fadeOut {
+            0% { opacity: 1; }
+            100% { opacity: 0; pointer-events: none; }
+        }
+    </style>
+</head>
+<body>
+    <!-- AI Loading Screen -->
+    <div class="ai-loader">
+        <div class="ai-text">AI GENERATING...</div>
+    </div>
+
+    <!-- Animated Background -->
+    <div class="matrix-bg"></div>
+    
+    <!-- Particle System -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Neural Network -->
+    <div class="neural-network" id="neuralNetwork"></div>
+
+    <div class="container">
+        <div class="header">
+            <div class="logo">🤖💤</div>
+            <h1>TOWNHALL PENTACODE</h1>
+            <p class="subtitle typing-text">Diskusi Terbuka untuk Masa Depan Kerja</p>
+            <div class="theme-highlight">
+                "AI dan Munculnya Kelas Rebahan"
+            </div>
+        </div>
+
+        <div class="details-card">
+            <div class="detail-item">
+                <div class="detail-icon">📅</div>
+                <div class="detail-content">
+                    <h3>Tanggal & Waktu</h3>
+                    <p>Rabu, 04 Juni 2025 | 15:00 WIB - Selesai</p>
+                </div>
+            </div>
+
+            <div class="detail-item">
+                <div class="detail-icon">📍</div>
+                <div class="detail-content">
+                    <h3>Lokasi</h3>
+                    <p>Ruang Meeting Lt. 3</p>
+                </div>
+            </div>
+
+            <div class="detail-item">
+                <div class="detail-icon">👥</div>
+                <div class="detail-content">
+                    <h3>Target Peserta</h3>
+                    <p>Seluruh karyawan & stakeholder perusahaan</p>
+                </div>
+            </div>
+
+            <div class="detail-item">
+                <div class="detail-icon">🎯</div>
+                <div class="detail-content">
+                    <h3>Tujuan</h3>
+                    <p>Membahas dampak AI terhadap budaya kerja dan produktivitas</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="fun-fact">
+            💡 <strong>AI FACT:</strong> Website ini dibuat sepenuhnya oleh AI dalam hitungan detik - menunjukkan revolusi otomasi yang sedang kita diskusikan!
+        </div>
+
+        <div class="agenda-section">
+            <h2>🗓️ Agenda Acara</h2>
+            
+            <div class="agenda-item">
+                <div class="agenda-time">14:00 - 14:15</div>
+                <div class="agenda-title">Pembukaan & Welcome Speech</div>
+                <div class="agenda-desc">Sambutan dari Direktur dan pengantar tema</div>
+            </div>
+
+            <div class="agenda-item">
+                <div class="agenda-time">14:15 - 14:45</div>
+                <div class="agenda-title">Keynote: "Revolusi AI di Tempat Kerja"</div>
+                <div class="agenda-desc">Presentasi tentang transformasi digital dan otomasi</div>
+            </div>
+
+            <div class="agenda-item">
+                <div class="agenda-time">14:45 - 15:15</div>
+                <div class="agenda-title">Panel Diskusi: "Kelas Rebahan vs Kelas Pekerja"</div>
+                <div class="agenda-desc">Diskusi interaktif dengan berbagai perspektif departemen</div>
+            </div>
+
+            <div class="agenda-item">
+                <div class="agenda-time">15:15 - 15:30</div>
+                <div class="agenda-title">Coffee Break & Networking</div>
+                <div class="agenda-desc">Kesempatan diskusi informal dengan kolega</div>
+            </div>
+
+            <div class="agenda-item">
+                <div class="agenda-time">15:30 - 15:50</div>
+                <div class="agenda-title">Q&A Session</div>
+                <div class="agenda-desc">Sesi tanya jawab terbuka dari seluruh peserta</div>
+            </div>
+
+            <div class="agenda-item">
+                <div class="agenda-time">15:50 - 16:00</div>
+                <div class="agenda-title">Penutupan & Action Items</div>
+                <div class="agenda-desc">Kesimpulan dan langkah-langkah selanjutnya</div>
+            </div>
+        </div>
+
+        <div class="cta-section">
+            <h2>Siap Bergabung?</h2>
+            <p style="color: #b0b0b0; margin-bottom: 35px; font-size: 1.1rem;">
+                Daftarkan diri Anda dan ikuti diskusi yang akan membentuk masa depan kerja kita!
+            </p>
+            
+            <button class="cta-button" onclick="window.open('https://forms.google.com', '_blank')">
+                📝 Daftar Sekarang
+            </button>
+            
+            <div style="margin-top: 40px; padding: 25px; background: rgba(0, 255, 255, 0.1); border-radius: 20px; border: 1px solid rgba(0, 255, 255, 0.3);">
+                <p style="color: #b0b0b0; font-size: 1rem;">
+                    <strong style="color: #00ffff;">Info Kontak:</strong><br>
+                    HR Department | 📧 hr@pentacode.id
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Create Particle System
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 50;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.width = Math.random() * 4 + 2 + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.animationDelay = Math.random() * 8 + 's';
+                particle.style.animationDuration = (Math.random() * 3 + 5) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Create Neural Network Animation
+        function createNeuralNetwork() {
+            const networkContainer = document.getElementById('neuralNetwork');
+            const nodeCount = 15;
+            const nodes = [];
+
+            // Create nodes
+            for (let i = 0; i < nodeCount; i++) {
+                const node = document.createElement('div');
+                node.className = 'neural-node';
+                node.style.left = Math.random() * 100 + '%';
+                node.style.top = Math.random() * 100 + '%';
+                node.style.animationDelay = Math.random() * 2 + 's';
+                networkContainer.appendChild(node);
+                nodes.push({
+                    element: node,
+                    x: parseFloat(node.style.left),
+                    y: parseFloat(node.style.top)
+                });
+            }
+
+            // Create connections
+            for (let i = 0; i < nodes.length; i++) {
+                for (let j = i + 1; j < nodes.length; j++) {
+                    const distance = Math.sqrt(
+                        Math.pow(nodes[i].x - nodes[j].x, 2) + 
+                        Math.pow(nodes[i].y - nodes[j].y, 2)
+                    );
+
+                    if (distance < 30) {
+                        const connection = document.createElement('div');
+                        connection.className = 'neural-connection';
+                        
+                        const angle = Math.atan2(nodes[j].y - nodes[i].y, nodes[j].x - nodes[i].x);
+                        const length = distance + '%';
+                        
+                        connection.style.left = nodes[i].x + '%';
+                        connection.style.top = nodes[i].y + '%';
+                        connection.style.width = length;
+                        connection.style.transform = `rotate(${angle}rad)`;
+                        connection.style.animationDelay = Math.random() * 3 + 's';
+                        
+                        networkContainer.appendChild(connection);
+                    }
+                }
+            }
+        }
+
+        // Advanced Interactions
+        document.addEventListener('DOMContentLoaded', function() {
+            createParticles();
+            createNeuralNetwork();
+
+            // Parallax effect for mouse movement
+            document.addEventListener('mousemove', function(e) {
+                const mouseX = e.clientX / window.innerWidth;
+                const mouseY = e.clientY / window.innerHeight;
+
+                document.querySelectorAll('.neural-node').forEach((node, index) => {
+                    const speed = (index % 3 + 1) * 0.5;
+                    const x = (mouseX - 0.5) * speed;
+                    const y = (mouseY - 0.5) * speed;
+                    node.style.transform = `translate(${x}px, ${y}px)`;
+                });
+            });
+
+            // Advanced hover effects
+            const interactiveElements = document.querySelectorAll('.detail-item, .agenda-item, .cta-button');
+            interactiveElements.forEach(element => {
+                element.addEventListener('mouseenter', function() {
+                    this.style.filter = 'brightness(1.2) saturate(1.3)';
+                });
+                
+                element.addEventListener('mouseleave', function() {
+                    this.style.filter = 'brightness(1) saturate(1)';
+                });
+            });
+
+            // Dynamic text effects
+            const headings = document.querySelectorAll('h1, h2');
+            headings.forEach(heading => {
+                heading.addEventListener('mouseenter', function() {
+                    this.style.transform = 'scale(1.05)';
+                    this.style.textShadow = '0 0 20px rgba(0, 255, 255, 0.8)';
+                });
+                
+                heading.addEventListener('mouseleave', function() {
+                    this.style.transform = 'scale(1)';
+                    this.style.textShadow = 'none';
+                });
+            });
+
+            // Spectacular scroll animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animation = 'slideInFromBottom 0.8s ease-out forwards';
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.detail-item, .agenda-item').forEach(item => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateY(50px)';
+                observer.observe(item);
+            });
+
+            // Matrix rain effect on click
+            document.addEventListener('click', function(e) {
+                createMatrixRain(e.clientX, e.clientY);
+            });
+
+            function createMatrixRain(x, y) {
+                const chars = '01AI♪♫♪♫';
+                for (let i = 0; i < 10; i++) {
+                    const char = document.createElement('div');
+                    char.textContent = chars[Math.floor(Math.random() * chars.length)];
+                    char.style.position = 'fixed';
+                    char.style.left = (x + (Math.random() - 0.5) * 100) + 'px';
+                    char.style.top = y + 'px';
+                    char.style.color = '#00ffff';
+                    char.style.fontSize = '20px';
+                    char.style.pointerEvents = 'none';
+                    char.style.zIndex = '9999';
+                    char.style.animation = 'matrixFall 2s ease-out forwards';
+                    
+                    document.body.appendChild(char);
+                    
+                    setTimeout(() => {
+                        char.remove();
+                    }, 2000);
+                }
+            }
+
+            // Add matrix fall animation
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes matrixFall {
+                    0% {
+                        opacity: 1;
+                        transform: translateY(0) scale(1);
+                    }
+                    100% {
+                        opacity: 0;
+                        transform: translateY(200px) scale(0.5);
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+
+            // Auto-scroll demonstration
+            setTimeout(() => {
+                const cards = document.querySelectorAll('.details-card, .agenda-section');
+                cards.forEach((card, index) => {
+                    setTimeout(() => {
+                        card.scrollIntoView({ 
+                            behavior: 'smooth', 
+                            block: 'center' 
+                        });
+                        
+                        // Add temporary highlight
+                        card.style.boxShadow = '0 0 50px rgba(0, 255, 255, 0.8)';
+                        setTimeout(() => {
+                            card.style.boxShadow = '';
+                        }, 1000);
+                    }, index * 2000);
+                });
+            }, 5000);
+
+            // Advanced theme switcher effect
+            let themeIndex = 0;
+            const themes = [
+                { primary: '#00ffff', secondary: '#ff00ff' },
+                { primary: '#ff6b6b', secondary: '#4ecdc4' },
+                { primary: '#a8e6cf', secondary: '#ff8b94' },
+                { primary: '#ffd93d', secondary: '#6bcf7f' }
+            ];
+
+            setInterval(() => {
+                themeIndex = (themeIndex + 1) % themes.length;
+                const theme = themes[themeIndex];
+                
+                document.documentElement.style.setProperty('--primary-color', theme.primary);
+                document.documentElement.style.setProperty('--secondary-color', theme.secondary);
+                
+                // Update neural network colors
+                document.querySelectorAll('.neural-node').forEach(node => {
+                    node.style.background = theme.primary;
+                    node.style.boxShadow = `0 0 10px ${theme.primary}`;
+                });
+            }, 10000);
+
+            // Typewriter effect for fun fact
+            const funFact = document.querySelector('.fun-fact');
+            const originalText = funFact.innerHTML;
+            funFact.innerHTML = '';
+            
+            setTimeout(() => {
+                let i = 0;
+                const typeInterval = setInterval(() => {
+                    if (i < originalText.length) {
+                        funFact.innerHTML = originalText.substring(0, i + 1);
+                        i++;
+                    } else {
+                        clearInterval(typeInterval);
+                    }
+                }, 50);
+            }, 3000);
+
+            // 3D tilt effect on cards
+            document.querySelectorAll('.details-card, .agenda-section, .cta-section').forEach(card => {
+                card.addEventListener('mousemove', function(e) {
+                    const rect = this.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    const rotateX = (y - centerY) / centerY * 10;
+                    const rotateY = (centerX - x) / centerX * 10;
+                    
+                    this.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
+                });
+            });
+
+            // Audio visualization effect (visual only)
+            const audioViz = document.createElement('div');
+            audioViz.style.position = 'fixed';
+            audioViz.style.bottom = '20px';
+            audioViz.style.right = '20px';
+            audioViz.style.width = '200px';
+            audioViz.style.height = '50px';
+            audioViz.style.zIndex = '1000';
+            audioViz.style.display = 'flex';
+            audioViz.style.alignItems = 'end';
+            audioViz.style.gap = '2px';
+            
+            for (let i = 0; i < 20; i++) {
+                const bar = document.createElement('div');
+                bar.style.width = '8px';
+                bar.style.backgroundColor = '#00ffff';
+                bar.style.borderRadius = '2px';
+                bar.style.animation = `audioBar 0.5s ease-in-out infinite alternate ${i * 0.1}s`;
+                audioViz.appendChild(bar);
+            }
+            
+            document.body.appendChild(audioViz);
+            
+            // Add audio bar animation
+            const audioStyle = document.createElement('style');
+            audioStyle.textContent = `
+                @keyframes audioBar {
+                    0% { height: 5px; }
+                    100% { height: ${Math.random() * 40 + 10}px; }
+                }
+            `;
+            document.head.appendChild(audioStyle);
+
+            // Celebration effect for CTA buttons
+            document.querySelectorAll('.cta-button').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Create celebration particles
+                    for (let i = 0; i < 30; i++) {
+                        const particle = document.createElement('div');
+                        particle.style.position = 'fixed';
+                        particle.style.left = e.clientX + 'px';
+                        particle.style.top = e.clientY + 'px';
+                        particle.style.width = '10px';
+                        particle.style.height = '10px';
+                        particle.style.background = ['#ff006e', '#8338ec', '#3a86ff'][Math.floor(Math.random() * 3)];
+                        particle.style.borderRadius = '50%';
+                        particle.style.pointerEvents = 'none';
+                        particle.style.zIndex = '9999';
+                        
+                        const angle = (Math.PI * 2 * i) / 30;
+                        const velocity = Math.random() * 200 + 100;
+                        const vx = Math.cos(angle) * velocity;
+                        const vy = Math.sin(angle) * velocity;
+                        
+                        particle.style.animation = `celebration 1s ease-out forwards`;
+                        particle.style.setProperty('--vx', vx + 'px');
+                        particle.style.setProperty('--vy', vy + 'px');
+                        
+                        document.body.appendChild(particle);
+                        
+                        setTimeout(() => particle.remove(), 1000);
+                    }
+                    
+                    // Delayed redirect
+                    setTimeout(() => {
+                        window.open(this.onclick.toString().match(/https?:\/\/[^']+/)[0], '_blank');
+                    }, 500);
+                });
+            });
+            
+            // Add celebration animation
+            const celebrationStyle = document.createElement('style');
+            celebrationStyle.textContent = `
+                @keyframes celebration {
+                    0% {
+                        opacity: 1;
+                        transform: translate(0, 0) scale(1);
+                    }
+                    100% {
+                        opacity: 0;
+                        transform: translate(var(--vx), var(--vy)) scale(0);
+                    }
+                }
+            `;
+            document.head.appendChild(celebrationStyle);
+        });
+
+    
