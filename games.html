@@ -1,0 +1,1334 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuizMaster - Platform Kuis Interaktif</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .main-menu {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .menu-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .menu-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+
+        .menu-card h3 {
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            color: #667eea;
+        }
+
+        .menu-card p {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Quiz Creator Styles */
+        .quiz-creator {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .question-item {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .question-item:hover {
+            border-color: #667eea;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .answer-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .answer-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            border: 2px solid #ddd;
+        }
+
+        .answer-option input[type="radio"] {
+            width: auto;
+        }
+
+        .answer-option.correct {
+            border-color: #28a745;
+            background-color: #d4edda;
+        }
+
+        /* Game Interface Styles */
+        .game-interface {
+            text-align: center;
+        }
+
+        .game-pin {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .pin-display {
+            font-size: 4em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+            letter-spacing: 10px;
+        }
+
+        .participants-list {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .participant-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            margin-bottom: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        /* Question Display Styles */
+        .question-display {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .timer {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #ff4757;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .question-text {
+            font-size: 2em;
+            margin-bottom: 30px;
+            color: #333;
+            text-align: center;
+        }
+
+        .answer-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .answer-btn {
+            padding: 20px;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: white;
+            font-weight: bold;
+        }
+
+        .answer-btn.option-a { background: #ff6b6b; }
+        .answer-btn.option-b { background: #4ecdc4; }
+        .answer-btn.option-c { background: #45b7d1; }
+        .answer-btn.option-d { background: #f9ca24; color: #333; }
+
+        .answer-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .answer-btn.selected {
+            transform: scale(0.95);
+            opacity: 0.8;
+        }
+
+        /* Leaderboard Styles */
+        .leaderboard {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .leaderboard-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            background: #f8f9fa;
+        }
+
+        .leaderboard-item.first { background: #ffd700; }
+        .leaderboard-item.second { background: #c0c0c0; }
+        .leaderboard-item.third { background: #cd7f32; }
+
+        .rank {
+            font-size: 1.5em;
+            font-weight: bold;
+            width: 50px;
+        }
+
+        .player-name {
+            flex-grow: 1;
+            font-size: 1.2em;
+            margin-left: 20px;
+        }
+
+        .score {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .back-btn {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: #5a6268;
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .answer-buttons {
+                grid-template-columns: 1fr;
+            }
+            
+            .pin-display {
+                font-size: 2.5em;
+                letter-spacing: 5px;
+            }
+            
+            .question-text {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Main Menu -->
+        <div id="mainMenu">
+            <div class="header">
+                <h1>🎯 QuizMaster</h1>
+                <p>Platform Kuis Interaktif untuk Pembelajaran yang Menyenangkan</p>
+            </div>
+            
+            <div class="main-menu">
+                <div class="menu-card" onclick="showQuizCreator()">
+                    <h3>📝 Buat Kuis</h3>
+                    <p>Buat kuis interaktif dengan berbagai tipe pertanyaan dan atur pengaturan permainan sesuai kebutuhan Anda.</p>
+                    <button class="btn">Mulai Membuat</button>
+                </div>
+                
+                <div class="menu-card" onclick="showHostGame()">
+                    <h3>🎮 Host Game</h3>
+                    <p>Mulai sesi kuis sebagai host, kelola peserta, dan pantau jalannya permainan secara real-time.</p>
+                    <button class="btn">Host Sekarang</button>
+                </div>
+                
+                <div class="menu-card" onclick="showJoinGame()">
+                    <h3>👥 Ikut Game</h3>
+                    <p>Bergabung dengan kuis yang sedang berlangsung menggunakan kode PIN dan mulai bermain!</p>
+                    <button class="btn">Gabung Game</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quiz Creator -->
+        <div id="quizCreator" class="hidden">
+            <button class="back-btn" onclick="showMainMenu()">← Kembali</button>
+            
+            <div class="quiz-creator">
+                <h2 style="text-align: center; margin-bottom: 30px; color: #667eea;">📝 Pembuat Kuis</h2>
+                
+                <div class="form-group">
+                    <label for="quizTitle">Judul Kuis:</label>
+                    <input type="text" id="quizTitle" placeholder="Masukkan judul kuis yang menarik...">
+                </div>
+                
+                <div class="form-group">
+                    <label for="quizDescription">Deskripsi:</label>
+                    <textarea id="quizDescription" rows="3" placeholder="Jelaskan tentang kuis ini..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="timeLimit">Waktu per Pertanyaan (detik):</label>
+                    <select id="timeLimit">
+                        <option value="10">10 detik</option>
+                        <option value="15" selected>15 detik</option>
+                        <option value="20">20 detik</option>
+                        <option value="30">30 detik</option>
+                        <option value="60">60 detik</option>
+                    </select>
+                </div>
+                
+                <hr style="margin: 30px 0;">
+                
+                <h3 style="margin-bottom: 20px; color: #667eea;">Pertanyaan:</h3>
+                
+                <div id="questionsContainer">
+                    <!-- Questions will be added here dynamically -->
+                </div>
+                
+                <button class="btn" onclick="addQuestion()" style="margin-right: 10px;">+ Tambah Pertanyaan</button>
+                <button class="btn" onclick="saveQuiz()">💾 Simpan Kuis</button>
+            </div>
+        </div>
+
+        <!-- Host Game Interface -->
+        <div id="hostGame" class="hidden">
+            <button class="back-btn" onclick="showMainMenu()">← Kembali</button>
+            
+            <div class="game-interface">
+                <div class="game-pin">
+                    <h2 style="margin-bottom: 20px; color: #667eea;">🎮 Host Game</h2>
+                    <div class="pin-display" id="gamePin">ABCD123</div>
+                    <p style="font-size: 1.2em; color: #666;">Bagikan kode ini kepada peserta</p>
+                </div>
+                
+                <div class="participants-list">
+                    <h3 style="margin-bottom: 20px; color: #667eea;">👥 Peserta yang Bergabung (<span id="participantCount">0</span>)</h3>
+                    <div id="participantsList">
+                        <!-- Participants will be added here -->
+                    </div>
+                    <button class="btn" onclick="startQuiz()" id="startBtn" style="margin-top: 20px;" disabled>🚀 Mulai Kuis</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Join Game Interface -->
+        <div id="joinGame" class="hidden">
+            <button class="back-btn" onclick="showMainMenu()">← Kembali</button>
+            
+            <div class="quiz-creator">
+                <h2 style="text-align: center; margin-bottom: 30px; color: #667eea;">👥 Bergabung dengan Game</h2>
+                
+                <div class="form-group">
+                    <label for="playerName">Nama Anda:</label>
+                    <input type="text" id="playerName" placeholder="Masukkan nama Anda...">
+                </div>
+                
+                <div class="form-group">
+                    <label for="gameCode">Kode Game:</label>
+                    <input type="text" id="gameCode" placeholder="Masukkan kode game..." style="text-transform: uppercase;">
+                </div>
+                
+                <div style="text-align: center;">
+                    <button class="btn" onclick="joinQuiz()">🎯 Bergabung</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Play Interface -->
+        <div id="gamePlay" class="hidden">
+            <div class="question-display">
+                <div class="timer" id="timer">15</div>
+                <div class="question-text" id="questionText">Pertanyaan akan muncul di sini...</div>
+                <div class="answer-buttons" id="answerButtons">
+                    <!-- Answer buttons will be generated here -->
+                </div>
+            </div>
+            
+            <div style="text-align: center;">
+                <button class="btn" onclick="nextQuestion()" id="nextBtn" style="display: none;">Pertanyaan Selanjutnya →</button>
+                <button class="btn" onclick="showResults()" id="finishBtn" style="display: none;">🏆 Lihat Hasil</button>
+            </div>
+        </div>
+
+        <!-- Results/Leaderboard -->
+        <div id="results" class="hidden">
+            <div class="leaderboard">
+                <h2 style="text-align: center; margin-bottom: 30px; color: #667eea;">🏆 Papan Peringkat</h2>
+                <div id="leaderboardList">
+                    <!-- Leaderboard items will be added here -->
+                </div>
+                <div style="text-align: center; margin-top: 30px;">
+                    <button class="btn" onclick="showMainMenu()">🏠 Menu Utama</button>
+                    <button class="btn" onclick="playAgain()" style="margin-left: 10px;">🔄 Main Lagi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let currentQuiz = {
+            title: '',
+            description: '',
+            timeLimit: 15,
+            questions: []
+        };
+        
+        let gameData = {
+            pin: '',
+            participants: [],
+            currentQuestion: 0,
+            scores: {},
+            isHost: false
+        };
+        
+        let questionTimer;
+        let timeLeft = 15;
+
+        // Navigation functions
+        function showMainMenu() {
+            hideAllScreens();
+            document.getElementById('mainMenu').classList.remove('hidden');
+        }
+        
+        function showQuizCreator() {
+            hideAllScreens();
+            document.getElementById('quizCreator').classList.remove('hidden');
+            initializeQuizCreator();
+        }
+        
+        function showHostGame() {
+            hideAllScreens();
+            document.getElementById('hostGame').classList.remove('hidden');
+            initializeHostGame();
+        }
+        
+        function showJoinGame() {
+            hideAllScreens();
+            document.getElementById('joinGame').classList.remove('hidden');
+        }
+        
+        function showGamePlay() {
+            hideAllScreens();
+            document.getElementById('gamePlay').classList.remove('hidden');
+            displayCurrentQuestion();
+        }
+        
+        function showResults() {
+            hideAllScreens();
+            document.getElementById('results').classList.remove('hidden');
+            displayLeaderboard();
+        }
+        
+        function hideAllScreens() {
+            const screens = ['mainMenu', 'quizCreator', 'hostGame', 'joinGame', 'gamePlay', 'results'];
+            screens.forEach(screen => {
+                document.getElementById(screen).classList.add('hidden');
+            });
+        }
+
+        // Quiz Creator functions
+        function initializeQuizCreator() {
+            // Clear existing questions container
+            const container = document.getElementById('questionsContainer');
+            if (container) {
+                container.innerHTML = '';
+            }
+            
+            // Reset quiz data if empty
+            if (currentQuiz.questions.length === 0) {
+                addQuestion();
+            } else {
+                // Rebuild interface for existing questions
+                rebuildQuestionsInterface();
+            }
+        }
+        
+        function addQuestion() {
+            const questionIndex = currentQuiz.questions.length;
+            const questionHtml = `
+                <div class="question-item" id="question-${questionIndex}">
+                    <div class="form-group">
+                        <label>Pertanyaan ${questionIndex + 1}:</label>
+                        <input type="text" id="q${questionIndex}-text" placeholder="Tulis pertanyaan Anda di sini...">
+                    </div>
+                    
+                    <div class="answer-options">
+                        <div class="answer-option" id="q${questionIndex}-opt-0">
+                            <input type="radio" name="correct-${questionIndex}" value="0" onchange="markCorrectAnswer(${questionIndex}, 0)">
+                            <input type="text" placeholder="Pilihan A" id="q${questionIndex}-option-0">
+                        </div>
+                        <div class="answer-option" id="q${questionIndex}-opt-1">
+                            <input type="radio" name="correct-${questionIndex}" value="1" onchange="markCorrectAnswer(${questionIndex}, 1)">
+                            <input type="text" placeholder="Pilihan B" id="q${questionIndex}-option-1">
+                        </div>
+                        <div class="answer-option" id="q${questionIndex}-opt-2">
+                            <input type="radio" name="correct-${questionIndex}" value="2" onchange="markCorrectAnswer(${questionIndex}, 2)">
+                            <input type="text" placeholder="Pilihan C" id="q${questionIndex}-option-2">
+                        </div>
+                        <div class="answer-option" id="q${questionIndex}-opt-3">
+                            <input type="radio" name="correct-${questionIndex}" value="3" onchange="markCorrectAnswer(${questionIndex}, 3)">
+                            <input type="text" placeholder="Pilihan D" id="q${questionIndex}-option-3">
+                        </div>
+                    </div>
+                    
+                    <button class="btn" onclick="removeQuestion(${questionIndex})" style="background: #dc3545; margin-top: 15px;">🗑️ Hapus Pertanyaan</button>
+                </div>
+            `;
+            
+            document.getElementById('questionsContainer').insertAdjacentHTML('beforeend', questionHtml);
+            
+            currentQuiz.questions.push({
+                text: '',
+                options: ['', '', '', ''],
+                correctAnswer: 0
+            });
+        }
+        
+        function markCorrectAnswer(questionIndex, optionIndex) {
+            // Remove previous correct marking
+            for (let i = 0; i < 4; i++) {
+                const optionElement = document.getElementById(`q${questionIndex}-opt-${i}`);
+                if (optionElement) {
+                    optionElement.classList.remove('correct');
+                }
+            }
+            
+            // Mark new correct answer
+            const newCorrectElement = document.getElementById(`q${questionIndex}-opt-${optionIndex}`);
+            if (newCorrectElement) {
+                newCorrectElement.classList.add('correct');
+            }
+            
+            // Update the question data
+            if (currentQuiz.questions[questionIndex]) {
+                currentQuiz.questions[questionIndex].correctAnswer = optionIndex;
+            }
+        }
+        
+        function removeQuestion(questionIndex) {
+            const questionElement = document.getElementById(`question-${questionIndex}`);
+            if (questionElement) {
+                questionElement.remove();
+            }
+            
+            // Remove from questions array
+            if (questionIndex < currentQuiz.questions.length) {
+                currentQuiz.questions.splice(questionIndex, 1);
+            }
+            
+            // Re-render all questions with updated indices
+            rebuildQuestionsInterface();
+        }
+        
+        function rebuildQuestionsInterface() {
+            const container = document.getElementById('questionsContainer');
+            if (!container) return;
+            
+            // Store current question data
+            const tempQuestions = [...currentQuiz.questions];
+            
+            // Clear container and questions array
+            container.innerHTML = '';
+            currentQuiz.questions = [];
+            
+            // Rebuild each question
+            tempQuestions.forEach((questionData, index) => {
+                addQuestion();
+                
+                // Populate the question data
+                setTimeout(() => {
+                    const questionTextEl = document.getElementById(`q${index}-text`);
+                    const option0El = document.getElementById(`q${index}-option-0`);
+                    const option1El = document.getElementById(`q${index}-option-1`);
+                    const option2El = document.getElementById(`q${index}-option-2`);
+                    const option3El = document.getElementById(`q${index}-option-3`);
+                    const correctRadio = document.querySelector(`input[name="correct-${index}"][value="${questionData.correctAnswer}"]`);
+                    
+                    if (questionTextEl) questionTextEl.value = questionData.text || '';
+                    if (option0El) option0El.value = questionData.options[0] || '';
+                    if (option1El) option1El.value = questionData.options[1] || '';
+                    if (option2El) option2El.value = questionData.options[2] || '';
+                    if (option3El) option3El.value = questionData.options[3] || '';
+                    if (correctRadio) {
+                        correctRadio.checked = true;
+                        markCorrectAnswer(index, questionData.correctAnswer);
+                    }
+                }, 100);
+            });
+        }
+        
+        function saveQuiz() {
+            // Collect quiz data
+            const titleElement = document.getElementById('quizTitle');
+            const descriptionElement = document.getElementById('quizDescription');
+            const timeLimitElement = document.getElementById('timeLimit');
+            
+            if (!titleElement || !descriptionElement || !timeLimitElement) {
+                alert('Error: Elemen form tidak ditemukan!');
+                return;
+            }
+            
+            currentQuiz.title = titleElement.value;
+            currentQuiz.description = descriptionElement.value;
+            currentQuiz.timeLimit = parseInt(timeLimitElement.value);
+            
+            // Collect questions data
+            const validQuestions = [];
+            
+            for (let index = 0; index < currentQuiz.questions.length; index++) {
+                const questionTextEl = document.getElementById(`q${index}-text`);
+                const option0El = document.getElementById(`q${index}-option-0`);
+                const option1El = document.getElementById(`q${index}-option-1`);
+                const option2El = document.getElementById(`q${index}-option-2`);
+                const option3El = document.getElementById(`q${index}-option-3`);
+                
+                // Skip if any element is missing (question was deleted)
+                if (!questionTextEl || !option0El || !option1El || !option2El || !option3El) {
+                    continue;
+                }
+                
+                const questionData = {
+                    text: questionTextEl.value,
+                    options: [
+                        option0El.value,
+                        option1El.value,
+                        option2El.value,
+                        option3El.value
+                    ],
+                    correctAnswer: currentQuiz.questions[index].correctAnswer || 0
+                };
+                
+                validQuestions.push(questionData);
+            }
+            
+            // Update questions array with valid questions only
+            currentQuiz.questions = validQuestions;
+            
+            // Validate quiz
+            if (!currentQuiz.title.trim()) {
+                alert('Mohon masukkan judul kuis!');
+                return;
+            }
+            
+            if (currentQuiz.questions.length === 0) {
+                alert('Mohon tambahkan minimal satu pertanyaan!');
+                return;
+            }
+            
+            for (let i = 0; i < currentQuiz.questions.length; i++) {
+                const q = currentQuiz.questions[i];
+                if (!q.text.trim()) {
+                    alert(`Mohon lengkapi pertanyaan ${i + 1}!`);
+                    return;
+                }
+                
+                if (q.options.some(opt => !opt.trim())) {
+                    alert(`Mohon lengkapi semua pilihan jawaban untuk pertanyaan ${i + 1}!`);
+                    return;
+                }
+            }
+            
+            // Auto-save the quiz
+            autoSaveQuiz();
+            
+            alert('Kuis berhasil disimpan! Anda sekarang dapat meng-host game.');
+            showHostGame();
+        }
+
+        // Host Game functions
+        function initializeHostGame() {
+            gameData.pin = generateGamePin();
+            gameData.participants = [];
+            gameData.scores = {};
+            gameData.isHost = true;
+            gameData.currentQuestion = 0;
+            
+            document.getElementById('gamePin').textContent = gameData.pin;
+            updateParticipantsList();
+            
+            // Simulate participants joining (for demo purposes)
+            setTimeout(() => addParticipant('Alice'), 2000);
+            setTimeout(() => addParticipant('Bob'), 3500);
+            setTimeout(() => addParticipant('Charlie'), 5000);
+        }
+        
+        function generateGamePin() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let result = '';
+            for (let i = 0; i < 6; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return result;
+        }
+        
+        function addParticipant(name) {
+            if (!gameData.participants.includes(name)) {
+                gameData.participants.push(name);
+                gameData.scores[name] = 0;
+                updateParticipantsList();
+            }
+        }
+        
+        function updateParticipantsList() {
+            const participantsList = document.getElementById('participantsList');
+            const participantCount = document.getElementById('participantCount');
+            
+            participantCount.textContent = gameData.participants.length;
+            
+            participantsList.innerHTML = '';
+            gameData.participants.forEach(participant => {
+                const participantHtml = `
+                    <div class="participant-item">
+                        <span class="player-name">👤 ${participant}</span>
+                        <span class="score">Siap bermain!</span>
+                    </div>
+                `;
+                participantsList.insertAdjacentHTML('beforeend', participantHtml);
+            });
+            
+            // Enable start button if there are participants and quiz is created
+            const startBtn = document.getElementById('startBtn');
+            if (gameData.participants.length > 0 && currentQuiz.questions.length > 0) {
+                startBtn.disabled = false;
+            }
+        }
+        
+        function startQuiz() {
+            if (currentQuiz.questions.length === 0) {
+                alert('Mohon buat kuis terlebih dahulu!');
+                showQuizCreator();
+                return;
+            }
+            
+            showGamePlay();
+        }
+
+        // Join Game functions
+        function joinQuiz() {
+            const playerName = document.getElementById('playerName').value.trim();
+            const gameCode = document.getElementById('gameCode').value.trim().toUpperCase();
+            
+            if (!playerName) {
+                alert('Mohon masukkan nama Anda!');
+                return;
+            }
+            
+            if (!gameCode) {
+                alert('Mohon masukkan kode game!');
+                return;
+            }
+            
+            // In a real app, this would validate the game code with the server
+            if (gameCode === gameData.pin || gameCode === 'DEMO123') {
+                gameData.isHost = false;
+                addParticipant(playerName);
+                alert(`Selamat datang ${playerName}! Menunggu host untuk memulai game...`);
+                
+                // Simulate joining existing game
+                setTimeout(() => {
+                    showGamePlay();
+                }, 2000);
+            } else {
+                alert('Kode game tidak valid! Coba lagi.');
+            }
+        }
+
+        // Game Play functions
+        function displayCurrentQuestion() {
+            if (gameData.currentQuestion >= currentQuiz.questions.length) {
+                showResults();
+                return;
+            }
+            
+            const question = currentQuiz.questions[gameData.currentQuestion];
+            document.getElementById('questionText').textContent = question.text;
+            
+            const answerButtons = document.getElementById('answerButtons');
+            const buttonClasses = ['option-a', 'option-b', 'option-c', 'option-d'];
+            const buttonLabels = ['A', 'B', 'C', 'D'];
+            
+            answerButtons.innerHTML = '';
+            question.options.forEach((option, index) => {
+                const buttonHtml = `
+                    <button class="answer-btn ${buttonClasses[index]}" onclick="selectAnswer(${index})">
+                        <strong>${buttonLabels[index]}:</strong> ${option}
+                    </button>
+                `;
+                answerButtons.insertAdjacentHTML('beforeend', buttonHtml);
+            });
+            
+            startTimer();
+        }
+        
+        function startTimer() {
+            timeLeft = currentQuiz.timeLimit;
+            document.getElementById('timer').textContent = timeLeft;
+            
+            questionTimer = setInterval(() => {
+                timeLeft--;
+                document.getElementById('timer').textContent = timeLeft;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(questionTimer);
+                    showQuestionResult();
+                }
+            }, 1000);
+        }
+        
+        function selectAnswer(answerIndex) {
+            clearInterval(questionTimer);
+            
+            // Mark selected answer
+            const buttons = document.querySelectorAll('.answer-btn');
+            buttons.forEach((btn, index) => {
+                if (index === answerIndex) {
+                    btn.classList.add('selected');
+                }
+                btn.disabled = true;
+            });
+            
+            // Check if answer is correct and award points
+            const question = currentQuiz.questions[gameData.currentQuestion];
+            if (answerIndex === question.correctAnswer) {
+                // Award points based on time left (faster = more points)
+                const points = Math.max(100, 500 + (timeLeft * 20));
+                const playerName = gameData.isHost ? 'Host' : gameData.participants[0] || 'Player';
+                gameData.scores[playerName] = (gameData.scores[playerName] || 0) + points;
+            }
+            
+            setTimeout(showQuestionResult, 1000);
+        }
+        
+        function showQuestionResult() {
+            const question = currentQuiz.questions[gameData.currentQuestion];
+            const buttons = document.querySelectorAll('.answer-btn');
+            
+            // Highlight correct answer
+            buttons.forEach((btn, index) => {
+                if (index === question.correctAnswer) {
+                    btn.style.background = '#28a745';
+                    btn.style.transform = 'scale(1.05)';
+                    btn.style.boxShadow = '0 0 20px rgba(40, 167, 69, 0.5)';
+                } else {
+                    btn.style.opacity = '0.5';
+                }
+            });
+            
+            // Show next question button
+            if (gameData.currentQuestion < currentQuiz.questions.length - 1) {
+                document.getElementById('nextBtn').style.display = 'inline-block';
+            } else {
+                document.getElementById('finishBtn').style.display = 'inline-block';
+            }
+        }
+        
+        function nextQuestion() {
+            gameData.currentQuestion++;
+            document.getElementById('nextBtn').style.display = 'none';
+            displayCurrentQuestion();
+        }
+
+        // Leaderboard functions
+        function displayLeaderboard() {
+            const leaderboardList = document.getElementById('leaderboardList');
+            
+            // Sort participants by score
+            const sortedScores = Object.entries(gameData.scores)
+                .sort(([,a], [,b]) => b - a);
+            
+            leaderboardList.innerHTML = '';
+            
+            sortedScores.forEach(([playerName, score], index) => {
+                const rankClass = index === 0 ? 'first' : index === 1 ? 'second' : index === 2 ? 'third' : '';
+                const emoji = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : '🏅';
+                
+                const leaderboardHtml = `
+                    <div class="leaderboard-item ${rankClass}">
+                        <div class="rank">${emoji}</div>
+                        <div class="player-name">${playerName}</div>
+                        <div class="score">${score.toLocaleString()} pts</div>
+                    </div>
+                `;
+                leaderboardList.insertAdjacentHTML('beforeend', leaderboardHtml);
+            });
+            
+            // Add some demo participants if list is empty
+            if (sortedScores.length === 0) {
+                const demoScores = [
+                    ['Alice', 2840],
+                    ['Bob', 2650],
+                    ['Charlie', 2400],
+                    ['Diana', 2100],
+                    ['Eve', 1980]
+                ];
+                
+                demoScores.forEach(([playerName, score], index) => {
+                    const rankClass = index === 0 ? 'first' : index === 1 ? 'second' : index === 2 ? 'third' : '';
+                    const emoji = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : '🏅';
+                    
+                    const leaderboardHtml = `
+                        <div class="leaderboard-item ${rankClass}">
+                            <div class="rank">${emoji}</div>
+                            <div class="player-name">${playerName}</div>
+                            <div class="score">${score.toLocaleString()} pts</div>
+                        </div>
+                    `;
+                    leaderboardList.insertAdjacentHTML('beforeend', leaderboardHtml);
+                });
+            }
+        }
+        
+        function playAgain() {
+            // Reset game data
+            gameData.currentQuestion = 0;
+            gameData.scores = {};
+            gameData.participants.forEach(participant => {
+                gameData.scores[participant] = 0;
+            });
+            
+            showGamePlay();
+        }
+
+        // Initialize demo quiz data
+        function initializeDemoQuiz() {
+            currentQuiz = {
+                title: 'Kuis Pengetahuan Umum',
+                description: 'Tes pengetahuan umum Anda dengan pertanyaan-pertanyaan menarik!',
+                timeLimit: 15,
+                questions: [
+                    {
+                        text: 'Apa ibu kota Indonesia?',
+                        options: ['Jakarta', 'Bandung', 'Surabaya', 'Medan'],
+                        correctAnswer: 0
+                    },
+                    {
+                        text: 'Planet mana yang paling dekat dengan Matahari?',
+                        options: ['Venus', 'Merkurius', 'Mars', 'Bumi'],
+                        correctAnswer: 1
+                    },
+                    {
+                        text: 'Berapa hasil dari 8 × 7?',
+                        options: ['54', '56', '58', '60'],
+                        correctAnswer: 1
+                    },
+                    {
+                        text: 'Siapa penemu bola lampu?',
+                        options: ['Albert Einstein', 'Thomas Edison', 'Nikola Tesla', 'Alexander Bell'],
+                        correctAnswer: 1
+                    },
+                    {
+                        text: 'Benua mana yang memiliki populasi terbesar?',
+                        options: ['Afrika', 'Eropa', 'Asia', 'Amerika'],
+                        correctAnswer: 2
+                    }
+                ]
+            };
+        }
+
+        // Advanced features
+        function generateQuizReport() {
+            if (Object.keys(gameData.scores).length === 0) {
+                alert('Belum ada data permainan untuk dilaporkan!');
+                return;
+            }
+            
+            const report = {
+                quizTitle: currentQuiz.title,
+                totalQuestions: currentQuiz.questions.length,
+                totalParticipants: Object.keys(gameData.scores).length,
+                averageScore: Object.values(gameData.scores).reduce((a, b) => a + b, 0) / Object.keys(gameData.scores).length,
+                highestScore: Math.max(...Object.values(gameData.scores)),
+                lowestScore: Math.min(...Object.values(gameData.scores))
+            };
+            
+            const reportText = `
+📊 LAPORAN KUIS - ${report.quizTitle}
+════════════════════════════════════
+
+📋 Detail Kuis:
+• Total Pertanyaan: ${report.totalQuestions}
+• Total Peserta: ${report.totalParticipants}
+
+📈 Statistik Skor:
+• Skor Tertinggi: ${report.highestScore.toLocaleString()} pts
+• Skor Terendah: ${report.lowestScore.toLocaleString()} pts
+• Rata-rata: ${Math.round(report.averageScore).toLocaleString()} pts
+
+🏆 Peringkat Peserta:
+${Object.entries(gameData.scores)
+    .sort(([,a], [,b]) => b - a)
+    .map(([name, score], index) => `${index + 1}. ${name}: ${score.toLocaleString()} pts`)
+    .join('\n')}
+
+Generated by QuizMaster - ${new Date().toLocaleString('id-ID')}
+            `;
+            
+            // Create downloadable report
+            const blob = new Blob([reportText], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `QuizReport_${currentQuiz.title.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            alert('Laporan kuis berhasil diunduh!');
+        }
+        
+        function exportQuizData() {
+            const quizData = {
+                ...currentQuiz,
+                createdAt: new Date().toISOString(),
+                version: '1.0'
+            };
+            
+            const dataStr = JSON.stringify(quizData, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Quiz_${currentQuiz.title.replace(/\s+/g, '_')}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            alert('Data kuis berhasil diekspor!');
+        }
+        
+        function importQuizData() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            input.onchange = function(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        try {
+                            const importedQuiz = JSON.parse(e.target.result);
+                            if (importedQuiz.title && importedQuiz.questions) {
+                                currentQuiz = importedQuiz;
+                                alert('Kuis berhasil diimpor!');
+                                showQuizCreator();
+                                
+                                // Populate form with imported data
+                                document.getElementById('quizTitle').value = currentQuiz.title;
+                                document.getElementById('quizDescription').value = currentQuiz.description || '';
+                                document.getElementById('timeLimit').value = currentQuiz.timeLimit || 15;
+                                
+                                // Clear and rebuild questions
+                                document.getElementById('questionsContainer').innerHTML = '';
+                                currentQuiz.questions.forEach(() => addQuestion());
+                                
+                                // Populate question data
+                                currentQuiz.questions.forEach((question, qIndex) => {
+                                    document.getElementById(`q${qIndex}-text`).value = question.text;
+                                    question.options.forEach((option, oIndex) => {
+                                        document.getElementById(`q${qIndex}-option-${oIndex}`).value = option;
+                                    });
+                                    // Mark correct answer
+                                    document.querySelector(`input[name="correct-${qIndex}"][value="${question.correctAnswer}"]`).checked = true;
+                                    markCorrectAnswer(qIndex, question.correctAnswer);
+                                });
+                            } else {
+                                alert('Format file tidak valid!');
+                            }
+                        } catch (error) {
+                            alert('Error membaca file: ' + error.message);
+                        }
+                    };
+                    reader.readAsText(file);
+                }
+            };
+            input.click();
+        }
+
+        // Enhanced UI interactions
+        function showConfetti() {
+            // Simple confetti effect using CSS
+            const confetti = document.createElement('div');
+            confetti.innerHTML = '🎉🎊✨🏆🎉🎊✨🏆🎉🎊✨🏆';
+            confetti.style.position = 'fixed';
+            confetti.style.top = '0';
+            confetti.style.left = '0';
+            confetti.style.width = '100%';
+            confetti.style.height = '100%';
+            confetti.style.fontSize = '2em';
+            confetti.style.display = 'flex';
+            confetti.style.justifyContent = 'space-around';
+            confetti.style.alignItems = 'center';
+            confetti.style.pointerEvents = 'none';
+            confetti.style.animation = 'confetti-fall 3s ease-out';
+            confetti.style.zIndex = '9999';
+            
+            document.body.appendChild(confetti);
+            
+            setTimeout(() => {
+                document.body.removeChild(confetti);
+            }, 3000);
+        }
+        
+        // Add confetti CSS animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes confetti-fall {
+                0% { opacity: 1; transform: translateY(-100vh) rotate(0deg); }
+                100% { opacity: 0; transform: translateY(100vh) rotate(360deg); }
+            }
+            
+            .pulse {
+                animation: pulse 2s infinite;
+            }
+            
+            @keyframes pulse {
+                0% { transform: scale(1); }
+                50% { transform: scale(1.05); }
+                100% { transform: scale(1); }
+            }
+            
+            .slide-in {
+                animation: slideIn 0.5s ease-out;
+            }
+            
+            @keyframes slideIn {
+                from { opacity: 0; transform: translateY(30px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Sound effects simulation
+        function playSound(type) {
+            // In a real app, this would play actual sound files
+            const soundMap = {
+                'correct': '🔊 Ding! (Jawaban Benar)',
+                'incorrect': '🔊 Buzz! (Jawaban Salah)',
+                'timer': '🔊 Tick... (Timer)',
+                'finish': '🔊 Tada! (Selesai)'
+            };
+            
+            if (soundMap[type] && window.console) {
+                console.log(soundMap[type]);
+            }
+        }
+
+        // Auto-save functionality
+        function autoSaveQuiz() {
+            try {
+                // Only save if we have valid quiz data
+                if (currentQuiz && currentQuiz.title && currentQuiz.questions.length > 0) {
+                    const saveData = {
+                        quiz: currentQuiz,
+                        timestamp: new Date().toISOString()
+                    };
+                    localStorage.setItem('quizmaster_autosave', JSON.stringify(saveData));
+                    console.log('Quiz auto-saved successfully');
+                }
+            } catch (error) {
+                // Handle localStorage errors silently
+                console.log('Auto-save tidak tersedia:', error.message);
+            }
+        }
+        
+        function loadAutoSave() {
+            try {
+                const saved = localStorage.getItem('quizmaster_autosave');
+                if (saved) {
+                    const data = JSON.parse(saved);
+                    if (confirm('Ditemukan data kuis yang tersimpan otomatis. Muat data tersebut?')) {
+                        currentQuiz = data.quiz;
+                        return true;
+                    }
+                }
+            } catch (error) {
+                console.log('Tidak dapat memuat auto-save');
+            }
+            return false;
+        }
+
+        // Initialize the application
+        function initializeApp() {
+            // Try to load auto-saved data
+            if (!loadAutoSave()) {
+                // Initialize with demo quiz if no saved data
+                initializeDemoQuiz();
+            }
+            
+            // Set up auto-save interval
+            setInterval(autoSaveQuiz, 30000); // Auto-save every 30 seconds
+            
+            // Add keyboard shortcuts
+            document.addEventListener('keydown', function(event) {
+                if (event.ctrlKey || event.metaKey) {
+                    switch(event.key) {
+                        case 's':
+                            event.preventDefault();
+                            if (!document.getElementById('quizCreator').classList.contains('hidden')) {
+                                saveQuiz();
+                            }
+                            break;
+                        case 'e':
+                            event.preventDefault();
+                            exportQuizData();
+                            break;
+                        case 'i':
+                            event.preventDefault();
+                            importQuizData();
+                            break;
+                    }
+                }
+                
+                // Space bar to start/continue game
+                if (event.code === 'Space') {
+                    if (!document.getElementById('hostGame').classList.contains('hidden')) {
+                        const startBtn = document.getElementById('startBtn');
+                        if (!startBtn.disabled) {
+                            event.preventDefault();
+                            startQuiz();
+                        }
+                    }
+                }
+            });
+            
+            console.log('🎯 QuizMaster berhasil dimuat!');
+            console.log('💡 Tips: Gunakan Ctrl+S untuk simpan, Ctrl+E untuk ekspor, Ctrl+I untuk impor');
+        }
+
+        // Start the application when page loads
+        document.addEventListener('DOMContentLoaded', initializeApp);
+    </script>
+</body>
+</html>
